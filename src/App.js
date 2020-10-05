@@ -1,6 +1,7 @@
 import React from 'react';
-
 import './App.css';
+import Post from './Post';
+
 
 function App() {
   return (
@@ -15,6 +16,10 @@ function App() {
       </div>
 
       <h1>This is app by Gavin Dang</h1>
+      <Post username="Gavin" caption="Monday" imageUrl="https://picsum.photos/id/10/200/100"/>
+      <Post username="Trung" caption="Tuesday" imageUrl="https://picsum.photos/id/20/200/100" />
+      <Post />
+
     </div>
   );
 }
