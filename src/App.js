@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Post from './Post';
-import { db } from './firebase'
+import { db, auth } from './firebase'
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { Button, Input } from '@material-ui/core';
@@ -34,6 +34,33 @@ function App() {
 
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        console.log(authUser);
+        setUser(authUser);
+
+        if (authUser.displayName) {
+
+        } else {
+          return authUser.updateProfile({
+            displayName: username,
+          })
+        }
+      } else {
+        setUser(null);
+      }
+    }) 
+
+    return () => {
+      unsubscribe();
+    }
+  }, [user, username]);
 
   useEffect(() => {
     db.collection('posts').onSnapshot(snapshot => {
@@ -47,6 +74,15 @@ function App() {
   }, [])
 
 
+
+  const signUp = (event) => {
+    event.preventDefault();
+
+    auth
+    .createUserWithEmailAndPassword(email, password)
+    .catch((error) => alert(error.message))
+  }
+
   return (
     <div className="app">
       
@@ -55,12 +91,14 @@ function App() {
         onClose={() => setOpen(false)}
       >
         <div style={modalStyle} className={classes.paper}>
-          <center>
-            <img 
-              className="app__headerImage"
-              src="https://instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
-              alt=""
-            />
+          <form className="app_signup">
+            <center>
+              <img 
+                className="app__headerImage"
+                src="https://instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
+                alt=""
+              />
+            </center>
             <Input 
               placeholder="username"
               type="text"
@@ -79,8 +117,8 @@ function App() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-
-          </center>
+            <Button type="submit" onClick={signUp}>Sign up</Button>
+          </form>
           
         </div>
       </Modal>

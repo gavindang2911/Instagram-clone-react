@@ -25,3 +25,9 @@
 .post__avatar {
     margin-right: 10px;
 }
+
+.app_signup {
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
+}
