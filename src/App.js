@@ -40,19 +40,25 @@ function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // onAuthStateChange listen for any single time for
+    // any auth happen
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
+        // user has logged in
         console.log(authUser);
-        setUser(authUser);
+        setUser(authUser); // check if user still log in by cookies
 
-        if (authUser.displayName) {
-
-        } else {
-          return authUser.updateProfile({
-            displayName: username,
-          })
-        }
+        // if (authUser.displayName) {
+        //   // dont update user name
+        // } else {
+        //   // if we just created someone
+        //   return authUser.updateProfile({
+        //     displayName: username,
+        //   })
+        // }
       } else {
+        // user has logged out
+
         setUser(null);
       }
     }) 
@@ -80,6 +86,11 @@ function App() {
 
     auth
     .createUserWithEmailAndPassword(email, password)
+    .then((authUser) => {
+      return authUser.user.updateProfile({
+        displayName: username
+      })
+    })
     .catch((error) => alert(error.message))
   }
 
@@ -113,7 +124,7 @@ function App() {
             />
             <Input 
               placeholder="password"
-              type="text"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -131,7 +142,12 @@ function App() {
         />
       </div>
 
-      <Button onClick={() => setOpen(true)}>Sign up</Button>
+      {user ? (
+        <Button onClick={() => auth.signOut()}>Log out</Button>
+      ): (
+        <Button onClick={() => setOpen(true)}>Sign up</Button>
+      )}
+
 
       {
         posts.map(({id,post}) => (
