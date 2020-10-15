@@ -20,4 +20,10 @@
 
 .app__posts {
   padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.app__postsRight {
+  padding-left: 15px;
 }
