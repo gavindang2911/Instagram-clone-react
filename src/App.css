@@ -6,8 +6,18 @@
   background-color: #fafafa;
 }
 .app__header {
+  display: flex;
+  justify-content: space-between;
   object-fit: contain;
   background-color: white;
   padding: 20px; /*padding add margin inside*/
   border-bottom: 1px solid lightgray; 
+}
+
+.app__headerImage {
+  object-fit: contain;
+}
+
+.app__posts {
+  padding: 20px;
 }
